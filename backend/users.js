@@ -1,3 +1,5 @@
+import bcrypt from 'bcryptjs'
+
 /**
  * Encapsulates the routes
  * @param {FastifyInstance} fastify  Encapsulated Fastify Instance
@@ -5,24 +7,39 @@
  */
 
 async function routes (fastify, options) {
-
-	fastify.post('/', async (request, reply) => {
-		return { hello: 'world'}
-	})
+	const users = fastify.mongo.db.collection('users_collection')
+	// fastify.post('/', async (request, reply) => {
+	// 	return { hello: 'world'}
+	// })
 
 	const userSchema = {
 		type: 'object',
 		required: ['email', 'username', 'password'],
 		properties: {
-			email: { type: 'string' },
-			username: { type: 'string' },
-			password: { type: 'string' },
+			email: { type: 'string', format: 'email' },
+			username: { type: 'string', minLength: 3 },
+			password: { type: 'string', minLength: 8, maxLength: 64 },
 		},
 	}
 	
 	const schema = {
 		body: userSchema,
 	}
+
+	fastify.post('/', { schema }, async (request, reply) => {
+		const value = await users.findOne({ $or: [ { email: request.body.email }, { username: request.body.username } ]})
+		if (value) {
+			reply.code(409).send('Existing value')
+			return
+		}
+		// return result
+
+		const hash = await bcrypt.hash(request.body.password, 12)
+		// return hash
+
+		const result = await 
+	})
+
 }
 
 export default routes
