@@ -1,8 +1,9 @@
 import Fastify from 'fastify'
 import dbConnector from './db-connector.js'
 import routes from './first-route.js'
-import users from './users.js'
+import users from './routes/users.js'
 import formats from 'ajv-formats'
+import auth from './routes/auth.js'
 
 //JSDoc : partie ignoree par node
 //const fastify doit etre traitee comme ayant le type FastifyInstance
@@ -11,13 +12,18 @@ import formats from 'ajv-formats'
  * @type {import('fastify').FastifyInstance} Instance of Fastify
  */
 
-const fastify = Fastify({ logger: true })
-
-const fasify = Fastify ({
+const fastify = Fastify({ 
+	logger: true,
 	ajv: {
 		plugins: [formats]	
 	}
 })
+
+// const fastify = Fastify ({
+// 	ajv: {
+// 		plugins: [formats]	
+// 	}
+// })
 
 //declare route directement dans le fichier d'entree
 // fastify.get('/', function (request, reply) {
@@ -28,7 +34,7 @@ const fasify = Fastify ({
 fastify.register(dbConnector)
 fastify.register(routes)
 fastify.register(users)
-
+fastify.register(auth)
 
 
 //run server

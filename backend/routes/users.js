@@ -32,14 +32,20 @@ async function routes (fastify, options) {
 			reply.code(409).send('Existing value')
 			return
 		}
-		// return result
 
 		const hash = await bcrypt.hash(request.body.password, 12)
-		// return hash
 
-		const result = await 
+		const userInit = {
+		email: request.body.email,
+		username: request.body.username,
+		hashedPw: hash,
+		avatar: '/uploads/avatars/default.png',
+		status: 'offline'
+		}
+	
+		const result = await users.insertOne(userInit)
+		return result
 	})
-
 }
 
 export default routes
