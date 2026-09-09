@@ -1,10 +1,10 @@
 import 'dotenv/config'
 import Fastify from 'fastify'
-import users from './routes/users.js'
-// import formats from 'ajv-formats'
+import prismaPlugin from './plugins/prisma.js'
+import users from './routes/usersRoutes.js'
 import fastifyCookie from '@fastify/cookie'
 import session from '@fastify/session'
-import auth from './routes/auth.js'
+import auth from './routes/authRoutes.js'
 
 const sessionSecret = process.env.SESSION_SECRET
 if (!sessionSecret) {
@@ -21,23 +21,10 @@ if (!sessionSecret) {
 
 const fastify = Fastify({ 
 	logger: true,
-	// ajv: {
-	// 	plugins: [formats]	
-	// }
 })
 
-// const fastify = Fastify ({
-// 	ajv: {
-// 		plugins: [formats]	
-// 	}
-// })
-
-//declare route directement dans le fichier d'entree
-// fastify.get('/', function (request, reply) {
-// 	reply.send({ hello: 'world' })
-// })
-
 // declare route depuis un autre fichier
+fastify.register(prismaPlugin)
 fastify.register(users)
 fastify.register(fastifyCookie)
 fastify.register(session, {

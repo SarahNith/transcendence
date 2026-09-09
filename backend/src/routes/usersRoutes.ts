@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import type { FastifyPluginAsync } from 'fastify'
 
+
 /**
  * Encapsulates the routes
  * @param {FastifyInstance} fastify  Encapsulated Fastify Instance
@@ -8,9 +9,6 @@ import type { FastifyPluginAsync } from 'fastify'
  */
 
 const routes: FastifyPluginAsync = async (fastify, options) => {
-
-
-
 
 	const userSchema = {
 		type: 'object',
