@@ -3,12 +3,12 @@ import Fastify from 'fastify'
 import prismaPlugin from './plugins/prisma.js'
 import users from './routes/usersRoutes.js'
 import fastifyCookie from '@fastify/cookie'
-import session from '@fastify/session'
+import jwt from '@fastify/jwt'
 import auth from './routes/authRoutes.js'
 
-const sessionSecret = process.env.SESSION_SECRET
-if (!sessionSecret) {
-	console.error("session secret error")
+const jwtSecret = process.env.JWT_SECRET
+if (!jwtSecret) {
+	console.error("jwt secret error")
 	process.exit(1)
 }
 
@@ -25,15 +25,12 @@ const fastify = Fastify({
 
 // declare route depuis un autre fichier
 fastify.register(prismaPlugin)
-fastify.register(users)
 fastify.register(fastifyCookie)
-fastify.register(session, {
-	secret: sessionSecret,
-	cookie: {
-		secure: false
-	},
-	saveUninitialized: false
-})
+fastify.register(jwt, { secret: jwtSecret, cookie: {
+	cookieName: 'token',
+	signed: false
+} })
+fastify.register(users)
 fastify.register(auth)
 
 

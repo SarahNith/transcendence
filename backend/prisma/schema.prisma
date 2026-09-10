@@ -18,6 +18,6 @@ model User {
   username     String   @unique
   hashedPw     String
   avatar       String   @default("/uploads/avatars/default.png")
-  onlineStatus String   @default("offline")
+  status       String   @default("offline")
   createdAt    DateTime @default(now())
 }
