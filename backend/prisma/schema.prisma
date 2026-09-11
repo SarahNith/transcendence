@@ -20,4 +20,30 @@ model User {
   avatar       String   @default("/uploads/avatars/default.png")
   status       String   @default("offline")
   createdAt    DateTime @default(now())
+  requester    Friendship[] @relation("sent")
+  addressee    Friendship[] @relation("received")
+  sender       Message[] @relation("send")
+  receiver     Message[] @relation("receive")
+}
+
+model Friendship {
+  id           String   @id @default(uuid())
+  requester    User 	@relation("sent", fields: [requesterId], references: [id])
+  requesterId  String 	
+  addressee    User 	@relation("received", fields: [addresseeId], references: [id])
+  addresseeId  String 	
+  status       String   @default("pending")
+  createdAt    DateTime @default(now())
+  @@unique([requesterId, addresseeId])
+}
+
+model Message {
+  id           String   @id @default(uuid())
+  sender       User 	@relation("send", fields: [senderId], references: [id])
+  senderId     String 	
+  receiver     User 	@relation("receive", fields: [receiverId], references: [id])
+  receiverId   String 	
+  message      String   
+  read		   Boolean  @default(false)
+  createdAt    DateTime @default(now())
 }

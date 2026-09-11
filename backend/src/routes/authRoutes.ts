@@ -37,16 +37,34 @@ const routes: FastifyPluginAsync = async (fastify, options) => {
 			reply.code(401).send({ error: 'Incorrect email or password' })
 			return
 		}
-		
+
 		const pw = await bcrypt.compare(request.body.password, user.hashedPw)
-		if (pw) {
-			request.session.userId = user.id
-			return user.id
+		if (pw) { 
+			const token = await reply.jwtSign({ id: user.id })
+			
+			reply.setCookie('token', token, {
+				path: '/',
+				secure: false,
+				httpOnly: true,
+				sameSite: true
+			})
+			.code(200)
+			.send({ success: true })
 		}
 		else {
 			reply.code(401).send({ error: 'Incorrect email or password' })
 			return
 		}
+		
+		// const pw = await bcrypt.compare(request.body.password, user.hashedPw)
+		// if (pw) {
+		// 	request.session.userId = user.id
+		// 	return user.id
+		// }
+		// else {
+		// 	reply.code(401).send({ error: 'Incorrect email or password' })
+		// 	return
+		// }
 
 		// return { hello: 'world' }
 	});

@@ -47,8 +47,22 @@ const routes: FastifyPluginAsync = async (fastify, options) => {
 		status: 'offline'
 		}
 	
-		const result = await fastify.prisma.user.create({ data: userInit })
-		return result
+		const result = await fastify.prisma.user.create({ 
+			data: userInit,
+			select: { id:true, email: true, username: true, avatar: true, status: true } })
+		
+		const token = await reply.jwtSign({ id: result.id })
+			
+		reply.setCookie('token', token, {
+			path: '/',
+			secure: false,
+			httpOnly: true,
+			sameSite: true
+		})
+		.code(200)
+		.send({ success: true })
+		
+		// return result
 	})
 }
 

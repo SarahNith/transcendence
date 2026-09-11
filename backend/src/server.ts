@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import Fastify from 'fastify'
 import prismaPlugin from './plugins/prisma.js'
-import users from './routes/usersRoutes.js'
+import users from './routes/userRegisRoutes.js'
 import fastifyCookie from '@fastify/cookie'
 import jwt from '@fastify/jwt'
 import auth from './routes/authRoutes.js'
