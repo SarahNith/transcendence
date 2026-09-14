@@ -4,7 +4,9 @@ import prismaPlugin from './plugins/prisma.js'
 import users from './routes/userRegisRoutes.js'
 import fastifyCookie from '@fastify/cookie'
 import jwt from '@fastify/jwt'
+import guard from './plugins/guardPlugin.js'
 import auth from './routes/authRoutes.js'
+
 
 const jwtSecret = process.env.JWT_SECRET
 if (!jwtSecret) {
@@ -31,6 +33,7 @@ fastify.register(jwt, { secret: jwtSecret, cookie: {
 	signed: false
 } })
 fastify.register(users)
+fastify.register(guard)
 fastify.register(auth)
 
 

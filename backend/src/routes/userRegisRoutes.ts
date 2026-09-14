@@ -1,5 +1,7 @@
 import bcrypt from 'bcryptjs'
-import type { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import Type from 'typebox'
+
 
 /**
  * Encapsulates the routes
@@ -7,31 +9,22 @@ import type { FastifyPluginAsync } from 'fastify'
  * @param {Object} options plugin options, refer to https://fastify.dev/docs/latest/Reference/Plugins/#plugin-options
  */
 
-interface UserSchema {
-	email: string
-	username: string
-	password: string
-}
+const routes: FastifyPluginAsyncTypebox = async (fastify, options) => {
 
-const routes: FastifyPluginAsync = async (fastify, options) => {
-
-	const userSchema = {
-		type: 'object',
-		required: ['email', 'username', 'password'],
-		properties: {
-			email: { type: 'string', format: 'email' },
-			username: { type: 'string', minLength: 3 },
-			password: { type: 'string', minLength: 8, maxLength: 64 },
-		},
-	}
+	const userSchema = 
+		Type.Object({
+			email: Type.String({ format: 'email' }),
+			username: Type.String({ minLength: 3 }),
+			password: Type.String({ minLength: 8, maxLength: 64 }),
+		})
 	
 	const schema = {
 		body: userSchema,
 	}
 
-	fastify.post<{ Body: UserSchema }>('/', { schema }, async (request, reply) => {
+	fastify.post('/', { schema }, async (request, reply) => {
 		const value = await fastify.prisma.user.findFirst({ 
-			where: { OR: [ { email: request.body.email	}, { username: request.body.username } ]}})
+			where: { OR: [ { email: request.body.email }, { username: request.body.username } ]}})
 		if (value) {
 			reply.code(409).send('Existing value')
 			return

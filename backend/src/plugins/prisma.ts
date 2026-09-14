@@ -1,9 +1,9 @@
 import fp from 'fastify-plugin'
-import type { FastifyPluginAsync } from 'fastify'
+import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { PrismaPg } from "@prisma/adapter-pg"
 import { PrismaClient } from "../generated/prisma/client.js"
 
-const prismaPlugin: FastifyPluginAsync = async (fastify, options) => {
+const prismaPlugin: FastifyPluginAsyncTypebox = async (fastify, options) => {
 	
 	const databaseUrl = process.env.DATABASE_URL
 	if (!databaseUrl) {
@@ -28,5 +28,12 @@ export default fp(prismaPlugin)
 declare module 'fastify' {
 	interface FastifyInstance {
 		prisma: PrismaClient
+	}
+}
+
+declare module '@fastify/jwt' {
+	interface FastifyJWT {
+		paylod: { id: string },
+		user: { id: string }
 	}
 }
