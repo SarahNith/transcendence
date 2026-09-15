@@ -9,7 +9,7 @@ import { Type } from 'typebox'
 
 //Renvoie les informations du compte de la personne concernee => "mon profil"
 
-const myProfile: FastifyPluginAsyncTypebox = async (fastify, options) => {
+const userProfile: FastifyPluginAsyncTypebox = async (fastify, options) => {
 
 	fastify.get('/', async (request, reply) => {
 		const profile = await fastify.prisma.user.findUnique({
@@ -64,4 +64,4 @@ const myProfile: FastifyPluginAsyncTypebox = async (fastify, options) => {
 })
 }
 
-export default myProfile
+export default userProfile

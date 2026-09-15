@@ -4,6 +4,7 @@ import prismaPlugin from './plugins/prisma.js'
 import users from './routes/userRegisRoutes.js'
 import fastifyCookie from '@fastify/cookie'
 import jwt from '@fastify/jwt'
+import multipart from '@fastify/multipart'
 import guard from './plugins/guardPlugin.js'
 import auth from './routes/authRoutes.js'
 
@@ -32,6 +33,11 @@ fastify.register(jwt, { secret: jwtSecret, cookie: {
 	cookieName: 'token',
 	signed: false
 } })
+fastify.register(multipart, {
+	limits: {
+		fileSize: 2 * 1024 * 1024,
+	}
+})
 fastify.register(users)
 fastify.register(guard)
 fastify.register(auth)

@@ -1,5 +1,7 @@
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import profileRoutes from '../routes/profileRoutes.js'
+import avatarRoutes from '../routes/avatarRoutes.js'
+
 
 
 //gardien qui protege ce qui vient apres l'authentification
@@ -18,6 +20,8 @@ const guardPlugin: FastifyPluginAsyncTypebox = async (fastify, options) => {
 	});
 
 	fastify.register(profileRoutes)
+	fastify.register(avatarRoutes)
+
 }
 
 export default guardPlugin
