@@ -7,6 +7,7 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
+	seed: "tsx prisma/seed.ts", // script pour creer un new user
   },
   datasource: {
     url: process.env["DATABASE_URL"],

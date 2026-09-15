@@ -1,5 +1,4 @@
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
-import fastify from 'fastify'
 import { Type } from 'typebox'
 
 /**
@@ -22,20 +21,47 @@ const myProfile: FastifyPluginAsyncTypebox = async (fastify, options) => {
 			return profile
 	})
 
-	fastify.patch('/', async (request, reply) => {
-		const updateSchema = Type.Optional({
-			email: Type.String({ format: 'email' }),
-			username: Type.String({ minLength: 3 }),
+	//modifier email et/ou username	
+	const updateSchema = Type.Object({
+			email: Type.Optional( Type.String({ format: 'email' }) ),
+			username: Type.Optional( Type.String({ minLength: 3 }) ),
 		})
-
-		const schema = {
+	
+	const schema = {
 			body: updateSchema,
 		}
 
+	fastify.patch('/', { schema }, async (request, reply) => {
+		
+		const values = []
+		if (request.body.email) {
+			values.push({ email: request.body.email })
+		}
+		if (request.body.username) {
+			values.push({ username: request.body.username })
+		}
+
+		if (values.length > 0) {
+			const searchConflict = await fastify.prisma.user.findFirst({
+				where: {
+					OR: values,
+					NOT: [{ id: request.user.id }],
+				}
+			})
+			if (searchConflict) {
+				reply.code(409).send('Existing value')
+				return
+			}
+		}
+	
 		const updateProfile = await fastify.prisma.user.update({
-			where: { OR: [ { email: request.body.email }, { username: request.body.username } ]}})
-	})
+			where: { id: request.user.id },
+			data: { email: request.body.email, username: request.body.username },
+			select: { id:true, email: true, username: true, avatar: true, status: true }
+		})
+		
+		return updateProfile
+})
 }
+
 export default myProfile
-
-
