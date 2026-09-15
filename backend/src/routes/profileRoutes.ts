@@ -19,9 +19,8 @@ const userProfile: FastifyPluginAsyncTypebox = async (fastify, options) => {
 		return profile
 	})
 
-	//modifier email et/ou username	
+	//modifier username	
 	const updateSchema = Type.Object({
-			// email: Type.Optional( Type.String({ format: 'email' }) ),
 			username: Type.Optional( Type.String({ minLength: 3 }) ),
 		})
 	
@@ -32,9 +31,7 @@ const userProfile: FastifyPluginAsyncTypebox = async (fastify, options) => {
 	fastify.patch('/', { schema }, async (request, reply) => {
 		
 		const values = []
-		// if (request.body.email) {
-		// 	values.push({ email: request.body.email })
-		// }
+		
 		if (request.body.username) {
 			values.push({ username: request.body.username })
 		}

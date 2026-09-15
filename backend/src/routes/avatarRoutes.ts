@@ -1,5 +1,6 @@
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from 'typebox'
+import crypto, { randomUUID } from "node:crypto"
 
 
 /**
@@ -24,7 +25,15 @@ const userAvatar: FastifyPluginAsyncTypebox = async (fastify, options) => {
 			return
 		}
 
-		// const avatarName = 
+		const generatedUUID = randomUUID()
+
+		const extension: Record<string, string> = {
+			"image/png": '.png',
+			"image/jpeg": '.jpg',
+			"image/webp": '.webp'
+		}
+
+		const avatarName = `${generatedUUID}${extension[avatar.mimetype]}`
 
 	})
 

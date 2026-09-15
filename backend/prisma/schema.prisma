@@ -13,17 +13,17 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  username     String   @unique
+  id           String       @id @default(uuid())
+  email        String       @unique
+  username     String       @unique
   hashedPw     String
-  avatar       String   @default("/uploads/avatars/default.png")
-  status       String   @default("offline")
-  createdAt    DateTime @default(now())
+  avatar       String       @default("/uploads/avatars/default.png")
+  status       String       @default("offline")
+  createdAt    DateTime     @default(now())
   requester    Friendship[] @relation("sent")
   addressee    Friendship[] @relation("received")
-  sender       Message[] @relation("send")
-  receiver     Message[] @relation("receive")
+  sender       Message[]    @relation("send")
+  receiver     Message[]    @relation("receive")
   pwChangedAt  DateTime?	
 }
 

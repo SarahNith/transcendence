@@ -3,7 +3,6 @@ import profileRoutes from '../routes/profileRoutes.js'
 import avatarRoutes from '../routes/avatarRoutes.js'
 import passwordRoutes from '../routes/passwordRoutes.js'
 
-
 //gardien qui protege ce qui vient apres l'authentification
 //verifie que le token est valide avant de lui permettre d'acceder au reste
 
@@ -40,7 +39,6 @@ const guardPlugin: FastifyPluginAsyncTypebox = async (fastify, options) => {
 	fastify.register(profileRoutes, { prefix: '/profile' })
 	fastify.register(avatarRoutes, { prefix: '/profile' })
 	fastify.register(passwordRoutes, { prefix: '/profile' })
-
 }
 
 export default guardPlugin
