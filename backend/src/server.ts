@@ -29,10 +29,14 @@ const fastify = Fastify({
 // declare route depuis un autre fichier
 fastify.register(prismaPlugin)
 fastify.register(fastifyCookie)
-fastify.register(jwt, { secret: jwtSecret, cookie: {
-	cookieName: 'token',
-	signed: false
-} })
+fastify.register(jwt, {	
+	secret: jwtSecret, 
+	cookie: {
+		cookieName: 'token',
+		signed: false
+	},
+	sign: { expiresIn: '8h' }
+})
 fastify.register(multipart, {
 	limits: {
 		fileSize: 2 * 1024 * 1024,

@@ -33,7 +33,7 @@ declare module 'fastify' {
 
 declare module '@fastify/jwt' {
 	interface FastifyJWT {
-		paylod: { id: string },
-		user: { id: string }
+		payload: { id: string },
+		user: { id: string, iat: number }
 	}
 }

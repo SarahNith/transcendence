@@ -24,7 +24,7 @@ const userAvatar: FastifyPluginAsyncTypebox = async (fastify, options) => {
 			return
 		}
 
-		const avatarName = ``
+		// const avatarName = 
 
 	})
 

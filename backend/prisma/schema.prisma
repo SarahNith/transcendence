@@ -24,6 +24,7 @@ model User {
   addressee    Friendship[] @relation("received")
   sender       Message[] @relation("send")
   receiver     Message[] @relation("receive")
+  pwChangedAt  DateTime?	
 }
 
 model Friendship {

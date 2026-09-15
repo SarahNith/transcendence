@@ -13,17 +13,15 @@ const userProfile: FastifyPluginAsyncTypebox = async (fastify, options) => {
 
 	fastify.get('/', async (request, reply) => {
 		const profile = await fastify.prisma.user.findUnique({
-			where: {
-				id: request.user.id
-			},
-			select: { email: true, username: true, avatar: true, status: true } })
-
-			return profile
+			where: { id: request.user.id },
+			select: { email: true, username: true, avatar: true, status: true } 
+		})
+		return profile
 	})
 
 	//modifier email et/ou username	
 	const updateSchema = Type.Object({
-			email: Type.Optional( Type.String({ format: 'email' }) ),
+			// email: Type.Optional( Type.String({ format: 'email' }) ),
 			username: Type.Optional( Type.String({ minLength: 3 }) ),
 		})
 	
@@ -34,9 +32,9 @@ const userProfile: FastifyPluginAsyncTypebox = async (fastify, options) => {
 	fastify.patch('/', { schema }, async (request, reply) => {
 		
 		const values = []
-		if (request.body.email) {
-			values.push({ email: request.body.email })
-		}
+		// if (request.body.email) {
+		// 	values.push({ email: request.body.email })
+		// }
 		if (request.body.username) {
 			values.push({ username: request.body.username })
 		}
@@ -56,7 +54,7 @@ const userProfile: FastifyPluginAsyncTypebox = async (fastify, options) => {
 	
 		const updateProfile = await fastify.prisma.user.update({
 			where: { id: request.user.id },
-			data: { email: request.body.email, username: request.body.username },
+			data: { username: request.body.username },
 			select: { id:true, email: true, username: true, avatar: true, status: true }
 		})
 		

@@ -42,7 +42,7 @@ const routes: FastifyPluginAsyncTypebox = async (fastify, options) => {
 	
 		const result = await fastify.prisma.user.create({ 
 			data: userInit,
-			select: { id:true, email: true, username: true, avatar: true, status: true } })
+			select: { id: true, email: true, username: true, avatar: true, status: true } })
 		
 		const token = await reply.jwtSign({ id: result.id })
 			
