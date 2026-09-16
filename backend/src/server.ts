@@ -7,7 +7,8 @@ import jwt from '@fastify/jwt'
 import multipart from '@fastify/multipart'
 import guard from './plugins/guardPlugin.js'
 import auth from './routes/authRoutes.js'
-
+import fastifyStatic from '@fastify/static'
+import path from 'node:path'
 
 const jwtSecret = process.env.JWT_SECRET
 if (!jwtSecret) {
@@ -45,7 +46,16 @@ fastify.register(multipart, {
 fastify.register(users)
 fastify.register(guard)
 fastify.register(auth)
+console.log(path.join(import.meta.dirname, '..', 'uploads'))
 
+fastify.register(fastifyStatic, {
+	root: path.join(import.meta.dirname, '..', 'uploads'),
+	prefix: '/uploads'
+})
+
+fastify.ready(() => {
+    console.log(fastify.printRoutes())
+})
 
 //run server
 fastify.listen({ port: 3000 }, function (err, address) {

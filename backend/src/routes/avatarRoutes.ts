@@ -1,6 +1,7 @@
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from 'typebox'
-import crypto, { randomUUID } from "node:crypto"
+import crypto, { randomUUID } from 'node:crypto'
+import path from 'node:path'
 
 
 /**
@@ -34,6 +35,8 @@ const userAvatar: FastifyPluginAsyncTypebox = async (fastify, options) => {
 		}
 
 		const avatarName = `${generatedUUID}${extension[avatar.mimetype]}`
+
+		const avatarPath = path.join("/uploads/avatars/", avatarName)
 
 	})
 
