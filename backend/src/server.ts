@@ -46,16 +46,16 @@ fastify.register(multipart, {
 fastify.register(users)
 fastify.register(guard)
 fastify.register(auth)
-console.log(path.join(import.meta.dirname, '..', 'uploads'))
+// console.log(path.join(import.meta.dirname, '..', 'uploads'))
 
 fastify.register(fastifyStatic, {
 	root: path.join(import.meta.dirname, '..', 'uploads'),
 	prefix: '/uploads'
 })
 
-fastify.ready(() => {
-    console.log(fastify.printRoutes())
-})
+// fastify.ready(() => {
+//     console.log(fastify.printRoutes())
+// })
 
 //run server
 fastify.listen({ port: 3000 }, function (err, address) {
