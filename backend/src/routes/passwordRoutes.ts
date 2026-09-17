@@ -53,6 +53,7 @@ const modifPassword: FastifyPluginAsyncTypebox = async (fastify, options) => {
 			})
 			.code(200)
 			.send({ success: true })
+			return
 		}
 		else {
 			reply.code(401).send({ error: 'Incorrect password' })

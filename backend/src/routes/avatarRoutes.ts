@@ -5,7 +5,6 @@ import path from 'node:path'
 import fs from 'node:fs'
 import { pipeline } from 'node:stream/promises'
 
-
 /**
  * Encapsulates the routes
  * @param {FastifyInstance} fastify  Encapsulated Fastify Instance
@@ -46,6 +45,7 @@ const userAvatar: FastifyPluginAsyncTypebox = async (fastify, options) => {
 
 		const avatarUrl = `/uploads/avatars/${avatarName}`
 
+
 		const currentAvatar = await fastify.prisma.user.findUnique({
 			where: { id: request.user.id },
 			select: { avatar: true },
@@ -61,6 +61,7 @@ const userAvatar: FastifyPluginAsyncTypebox = async (fastify, options) => {
 			select: { id:true, email: true, username: true, avatar: true, status: true }
 		})
 
+		//suppr ancien fichier avatar
 		const oldAvatarPath = path.join(import.meta.dirname, '..', '..', currentAvatar.avatar)
 		if (currentAvatar.avatar !== "/uploads/avatars/default.png") {
 			try {

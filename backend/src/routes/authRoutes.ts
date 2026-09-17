@@ -8,6 +8,8 @@ import { Type } from 'typebox'
  * @param {Object} options plugin options, refer to https://fastify.dev/docs/latest/Reference/Plugins/#plugin-options
  */
 
+const dummyHash = bcrypt.hash("dummyPwToCompareWith", 12)
+
 const routes: FastifyPluginAsyncTypebox = async (fastify, options) => {
 
 	const authSchema = 
@@ -28,12 +30,21 @@ const routes: FastifyPluginAsyncTypebox = async (fastify, options) => {
 			}
 		})
 		if (!user) {
+			
+			await bcrypt.compare(request.body.password, await dummyHash)
 			reply.code(401).send({ error: 'Incorrect email or password' })
 			return
 		}
 
 		const pw = await bcrypt.compare(request.body.password, user.hashedPw)
 		if (pw) { 
+
+			const updateStatus = await fastify.prisma.user.update({
+				where: { id: user.id },
+				data: { status: 'online' },
+			})
+
+			//cree un token
 			const token = await reply.jwtSign({ id: user.id })
 			
 			reply.setCookie('token', token, {
@@ -44,8 +55,10 @@ const routes: FastifyPluginAsyncTypebox = async (fastify, options) => {
 			})
 			.code(200)
 			.send({ success: true })
+			return updateStatus
 		}
 		else {
+			
 			reply.code(401).send({ error: 'Incorrect email or password' })
 			return
 		}
